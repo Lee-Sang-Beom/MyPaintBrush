@@ -1,4 +1,7 @@
 const canvas = document.querySelector("#jsCanvas");
+
+// canvas는 getContext 메서드를 이용해 렌더링 컨텍스트를 뽑아낼 수 있습니다. 그리고
+// 그리고 이 컨텍스트가 제공하는 함수를 통해 도형 및 그림을 그릴 수 있도록 합니다.
 const ctx = canvas.getContext('2d');
 const colors = document.querySelectorAll(".jsColor");
 const range = document.querySelector("#jsRange");
@@ -44,16 +47,16 @@ function onMouseMove(event){
 
     if(!painting){ 
         // Painting is false : recode path
-        ctx.beginPath();
-        ctx.moveTo(x,y);
+        ctx.beginPath(); // 경로를 시작하거나 새 경로를 지정합니다. 선을 그리기 위해 실행하는 함수입니다.
+        ctx.moveTo(x,y); // 펜을 x와 y로 지정된 좌표로 옮깁니다.
     }else{ 
         // Painting is true : painting line
-        ctx.lineTo(x,y); 
-        ctx.stroke(); 
+        ctx.lineTo(x,y); // 현재의 드로잉 위치에서 x와 y로 지정된 위치까지 경로에 선을 추가합니다.
+        ctx.stroke(); // 현재 stroke스타일로 지정된 경로를 "그립니다"
     }
 }
 
-function onMouseDown(event){
+function onMouseDown(){
     // Mouse click down event listener
     painting = true;    
 }
@@ -61,8 +64,8 @@ function onMouseDown(event){
 function handleColorClick(event){
     // Canvas background color setting
     const color = event.target.style.backgroundColor;
-    ctx.strokeStyle = color;
-    ctx.fillStyle = ctx.strokeStyle;
+    ctx.strokeStyle = color; // 선의 색상
+    ctx.fillStyle = ctx.strokeStyle; // 배경 채우기 색상도 같은 것으로 변경
 }
 
 function handleRangeClick(event){
@@ -71,7 +74,7 @@ function handleRangeClick(event){
     ctx.lineWidth = range;
 }
 
-function handleModeClick(event){
+function handleModeClick(){
     // Draw mode settings : FILL / PAINT
     if(filling){
         filling = false;
@@ -82,9 +85,11 @@ function handleModeClick(event){
     }
 }
 
-function handleCanvasClick(event){
+function handleCanvasClick(){
     if(filling){
         // Give background color
+        // 시작점이 (0,0)이고 크기가 캔버스 크기만큼인 사각형을 그립니다.
+        // 채우기 스타일은 사전에 정의해둔 fillStyle 속성에 의해 결정됩니다.
         ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
     }
 }
@@ -94,18 +99,18 @@ function handleCM(event){
     event.preventDefault();
 }
 
-function handleSaveClick(event){
+function handleSaveClick(){
     // Save Canvas 
-    const img = canvas.toDataURL("image/png");
+    const img = canvas.toDataURL("image/png"); // 캔버스의 데이터 URL을 얻음
     const link = document.createElement("a");
 
     link.href = img;
-    link.download = "PAINTJS[EXPORT]"; 
+    link.download = "PAINTJS[EXPORT]";  // 캔버스의 데이터 URL과 a태그의 download 속성을 이용해 파일을 다운받음
 
     link.click();
 }
 
-function handleRemoveClick(event){
+function handleRemoveClick(){
     // Delete entire picture on canvas
     ctx.clearRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
 }
